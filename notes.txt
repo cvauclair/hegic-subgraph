@@ -1,0 +1,45 @@
+================================================================
+Options
+================================================================
+HegicWBTCOptions: 0x3961245DB602eD7c03eECcda33eA3846bD8723BD
+HegicETHOptions: 0xEfC0eEAdC1132A12c9487d800112693bf49EcfA2
+
+Events:
+- Create(id, account, settlementFee, totalFee)
+where settlementFee = amount to be distributed to HEGIC holders and totalFee = total price to be paid
+- Exercise(id, profit)
+- Expire(id, premium)
+
+Misc:
+- Call impliedVolRate to get IV (in )
+
+================================================================
+Oracles
+================================================================
+EACAggregatorProxy (ETH price oracle): 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419
+EACAggregatorProxy (BTC price oracle): 0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c
+-> USD price = EACAggregatorProxy.latestAnswer / 10**EACAggregatorProxy.decimals
+
+================================================================
+Liquidity pools
+================================================================
+HegicETHPool: 0x878F15ffC8b894A1BA7647c7176E4C01f74e140b
+
+Events:
+- Provide(account, amount, writeAmount)
+- Withdraw(account, amount, writeAmount)
+- Profit(id, amount)
+emitted in tandem with Expire from Options contract (i.e.: premium of Expire is amount of Profit)
+- Loss(id, amount)
+emitted in tandem with Exercise from Options contract (i.e.: profit of Exercise is amount of Loss)
+
+================================================================
+Staking
+================================================================
+HEGIC token: 0x584bC13c7D411c00c01A62e8019472dE68768430
+HegicStakingETH: 0x1Ef61E3E5676eC182EED6F052F8920fD49C7f69a
+HegicStakingWBTC: 0x840a1AE46B7364855206Eb5b7286Ab7E207e515b
+
+Events:
+- Claim(account, amount)
+- Profit(amount)

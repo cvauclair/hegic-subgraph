@@ -1,0 +1,70 @@
+specVersion: 0.0.2
+description: Hegic is a decentralized pooled options protocol.
+# repository: https://github.com/graphprotocol/uniswap-subgraph
+
+schema:
+  file: ./schema.graphql
+dataSources:
+  # Uniswap for reference
+  # - kind: ethereum/contract
+  #   name: UniswapV1Factory
+  #   network: mainnet
+  #   source:
+  #     address: '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95'
+  #     abi: UniswapV1Factory
+  #     startBlock: 6627917
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.3
+  #     language: wasm/assemblyscript
+  #     file: ./src/mappings/Uniswap/UniswapV1Factory.ts
+  #     entities:
+  #       - UniswapPair
+  #       - Token
+  #     abis:
+  #       - name: UniswapV1Factory
+  #         file: ./abis/UniswapV1Factory.json
+  #       - name: UniswapV1Exchange
+  #         file: ./abis/UniswapV1Exchange.json
+  #       - name: ERC20
+  #         file: ./abis/ERC20.json
+  #       - name: ERC20SymbolBytes
+  #         file: ./abis/ERC20SymbolBytes.json
+  #       - name: ERC20NameBytes
+  #         file: ./abis/ERC20NameBytes.json
+  #     eventHandlers:
+  #       - event: NewExchange(indexed address,indexed address)
+  #         handler: handleNewExchange
+templates:
+  # These data sources templates exist to support the different flags that a token could specify
+  # - kind: ethereum/contract
+  #   name: UniswapV1Exchange
+  #   network: mainnet
+  #   source:
+  #     abi: UniswapV1Exchange
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.3
+  #     language: wasm/assemblyscript
+  #     file: ./src/mappings/Uniswap/UniswapV1Exchange.ts
+  #     entities:
+  #       - TradePair
+  #       - UniswapPair
+  #       - Token
+  #       - Trade
+  #       - Liquidity
+  #       - Block
+  #     abis:
+  #       - name: UniswapV1Exchange
+  #         file: ./abis/UniswapV1Exchange.json
+  #     eventHandlers:
+  #       - event: EthPurchase(indexed address,indexed uint256,indexed uint256)
+  #         handler: handleEthPurchase
+  #       - event: TokenPurchase(indexed address,indexed uint256,indexed uint256)
+  #         handler: handleTokenPurchase
+  #       - event: AddLiquidity(indexed address,indexed uint256,indexed uint256)
+  #         handler: handleAddLiquidity
+  #       - event: RemoveLiquidity(indexed address,indexed uint256,indexed uint256)
+  #         handler: handleRemoveLiquidity
+        # - event: Transfer(indexed address,indexed address,uint256)
+        #   handler: handleTransfer

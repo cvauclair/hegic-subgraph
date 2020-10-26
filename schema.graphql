@@ -1,0 +1,148 @@
+# ================================================================
+# Event-like entities (i.e.: tracked over time)
+# ================================================================
+type Provide @entity {
+  id: ID! # POOL_ADDR-PROVIDE_INDEX
+
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  account: String!
+  amount: BigInt!
+  numWriteTokens: BigInt!
+
+  pool: LiquidityPool!  @derivedFrom(field: "provide")
+}
+
+type Withdraw @entity {
+  id: ID! # POOL_ADDR-WITHDRAW_INDEX
+
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  account: String!
+  amount: BigInt!
+  numWriteTokens: BigInt!
+
+  pool: LiquidityPool!  @derivedFrom(field: "withdraw")
+}
+
+type Profit @entity {
+  id: ID! # POOL_ADDR-POOL_PROFIT_INDEX
+
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  amount: BigDecimal!
+  option: HegicOption! @derivedFrom(field: "profits")
+}
+
+type Loss @entity {
+  id: ID! # POOL_ADDR-POOL_LOSS_INDEX
+
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  amount: BigDecimal!
+  option: HegicOption! @derivedFrom(field: "losses")
+}
+
+type Exercise @entity {
+  id: ID! # POOL_ADDRESS-OPTION_ID
+
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  profit: BigInt!
+  option: HegicOption! @derivedFrom(field: "exercise")
+}
+
+type Expire @entity {
+  id: ID! # POOL_ADDRESS-OPTION_ID
+
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  profit: BigInt!
+  option: HegicOption! @derivedFrom(field: "expire")
+}
+
+type Claim @entity {
+  id: ID!
+
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  amount: BigDecimal!
+  account: String!
+}
+
+# ================================================================
+# Assets and options
+# ================================================================
+type Asset @entity {
+  id: ID! # id is token address, with 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE for ETH
+  symbol: String!
+  name: String!
+  decimals: Int!
+
+  impliedVolatility: BigInt!
+}
+
+enum OptionState {
+  Inactive
+  Active
+  Exercised
+  Expired
+}
+
+enum OptionType {
+  Put
+  Call
+}
+
+type HegicOption @entity {
+  id: ID! # POOL_ADDR-OPTION_ID
+  underlying: Asset!
+
+  creationBlock: BigInt!
+  creationTimestamp: BigInt!
+
+  holder: String!
+  premium: BigDecimal!
+  strike: BigDecimal!
+  amount: BigDecimal!
+  expiration: BigInt!
+  type: OptionType!
+  state: OptionState!
+
+  exercise: Exercise
+  expire: Expire
+}
+
+# ================================================================
+# Liquidity pools and staking
+# ================================================================
+type LiquidityPool @entity {
+  id: ID! # POOL_ADDR
+
+  underlying: Asset!
+  numOptions: BigInt!
+  options: [HegicOption]!
+
+  numProvideEvents: BigInt!
+  provideEvents: [Provide]!
+  latestProvideEvent: Provide
+
+  numWithdrawEvents: BigInt!
+  withdrawEvents: [Withdraw]!
+  latestWithdrawEvent: Withdraw
+
+  numProfitEvents: BigInt!
+  profitEvents: [Profit]!
+  latestProfitEvent: Profit
+
+  numLossEvents: BigInt!
+  lossEvents: [Loss]!
+  latestLossEvent: Loss
+}
