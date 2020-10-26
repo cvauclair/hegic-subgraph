@@ -5,7 +5,7 @@ import { Address } from '@graphprotocol/graph-ts';
 import { BigIntOne, BigIntZero } from "../utils";
 
 let ETH_OPTIONS = "0xefc0eeadc1132a12c9487d800112693bf49ecfa2";
-let ETH_ADDR = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
+let ETH_ADDR = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 
 export function handleCreate(event: Create): void {
   let ethOptions = Contract.bind(Address.fromString(ETH_OPTIONS));
@@ -66,24 +66,24 @@ export function handleCreate(event: Create): void {
   }
 
   if (option_data.value0 == 0) {
-    option.type = "Inactive";
+    option.state = "Inactive";
   } else if (option_data.value0 == 1) {
-    option.type = "Active";
+    option.state = "Active";
   } else if (option_data.value0 == 2) {
-    option.type = "Exercised";
+    option.state = "Exercised";
   } else if (option_data.value0 == 3) {
-    option.type = "Expired";
+    option.state = "Expired";
   } else {
     return
   }
-
+  
   // Save entities
   liquidity_pool.numOptions = liquidity_pool.numOptions + BigIntOne;
   let options = liquidity_pool.options;
   options.push(option.id);
   liquidity_pool.options = options;
   liquidity_pool.save()
-
+  
   option.save()
 };
 

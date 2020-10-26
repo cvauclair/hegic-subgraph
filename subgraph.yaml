@@ -64,7 +64,7 @@ dataSources:
         - event: Expire(indexed uint256,uint256)
           handler: handleExpire
   - kind: ethereum/contract
-    name: ERCLiquidityPool
+    name: WBTCLiquidityPool
     network: mainnet
     source:
       address: '0x20dd9e22d22dd0a6ef74a520cb08303b5fad5de7'
@@ -74,7 +74,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
-      file: ./src/mappings/LiquidityPool.ts
+      file: ./src/mappings/WBTCLiquidityPool.ts
       entities:
         - LiquidityPool
       abis:
@@ -104,7 +104,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
-      file: ./src/mappings/LiquidityPool.ts
+      file: ./src/mappings/ETHLiquidityPool.ts
       entities:
         - LiquidityPool
       abis:

@@ -66,13 +66,13 @@ export function handleCreate(event: Create): void {
   }
 
   if (option_data.value0 == 0) {
-    option.type = "Inactive";
+    option.state = "Inactive";
   } else if (option_data.value0 == 1) {
-    option.type = "Active";
+    option.state = "Active";
   } else if (option_data.value0 == 2) {
-    option.type = "Exercised";
+    option.state = "Exercised";
   } else if (option_data.value0 == 3) {
-    option.type = "Expired";
+    option.state = "Expired";
   } else {
     return
   }
@@ -88,9 +88,21 @@ export function handleCreate(event: Create): void {
 };
 
 export function handleExercise(event: Exercise): void {
+  let option = HegicOption.load("WBTC-" + event.params.id.toString())
+  if (option == null) {
+    return
+  }
 
+  option.state = "Exercised"
+  option.save()
 }
 
 export function handleExpire(event: Expire): void {
-  
+  let option = HegicOption.load("WBTC-" + event.params.id.toString())
+  if (option == null) {
+    return
+  }
+
+  option.state = "Expired"
+  option.save()
 }
