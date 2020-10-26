@@ -27,19 +27,28 @@ export function handleCreate(event: Create): void {
   if (liquidity_pool == null) {
     liquidity_pool = new LiquidityPool(pool_addr)
     liquidity_pool.underlying = underlying.id;
+    liquidity_pool.numOptions = BigIntZero;
+    liquidity_pool.options = [];
+
+    liquidity_pool.numProvides = BigIntZero;
+    liquidity_pool.provides = [];
+    liquidity_pool.numWithdraws = BigIntZero;
+    liquidity_pool.withdraws = [];
+    liquidity_pool.numProfits = BigIntZero;
+    liquidity_pool.profits = [];
+    liquidity_pool.numLosses = BigIntZero;
+    liquidity_pool.losses = [];
   }
 
   // Create option
   let option = new HegicOption("WBTC-" + event.params.id.toString());
 
-  // TODO:
   option.underlying = underlying.id;
-
   option.creationBlock = event.block.number;
   option.creationTimestamp = event.block.timestamp;
-
   option.holder = event.params.account.toHexString().toString();
   option.premium = event.params.totalFee - event.params.settlementFee;
+  option.settlementFee = event.params.settlementFee;
   
   // Get from state 
   let option_data = wbtcOptions.options(event.params.id)
