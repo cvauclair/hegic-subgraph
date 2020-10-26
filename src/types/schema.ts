@@ -230,13 +230,22 @@ export class Profit extends Entity {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get amount(): BigDecimal {
+  get amount(): BigInt {
     let value = this.get("amount");
-    return value.toBigDecimal();
+    return value.toBigInt();
   }
 
-  set amount(value: BigDecimal) {
-    this.set("amount", Value.fromBigDecimal(value));
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get pool(): string {
+    let value = this.get("pool");
+    return value.toString();
+  }
+
+  set pool(value: string) {
+    this.set("pool", Value.fromString(value));
   }
 
   get option(): string {
@@ -297,147 +306,22 @@ export class Loss extends Entity {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get amount(): BigDecimal {
+  get amount(): BigInt {
     let value = this.get("amount");
-    return value.toBigDecimal();
+    return value.toBigInt();
   }
 
-  set amount(value: BigDecimal) {
-    this.set("amount", Value.fromBigDecimal(value));
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
   }
 
-  get option(): string {
-    let value = this.get("option");
+  get pool(): string {
+    let value = this.get("pool");
     return value.toString();
   }
 
-  set option(value: string) {
-    this.set("option", Value.fromString(value));
-  }
-}
-
-export class Exercise extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Exercise entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Exercise entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Exercise", id.toString(), this);
-  }
-
-  static load(id: string): Exercise | null {
-    return store.get("Exercise", id) as Exercise | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
-    return value.toBigInt();
-  }
-
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
-  }
-
-  get timestamp(): BigInt {
-    let value = this.get("timestamp");
-    return value.toBigInt();
-  }
-
-  set timestamp(value: BigInt) {
-    this.set("timestamp", Value.fromBigInt(value));
-  }
-
-  get profit(): BigInt {
-    let value = this.get("profit");
-    return value.toBigInt();
-  }
-
-  set profit(value: BigInt) {
-    this.set("profit", Value.fromBigInt(value));
-  }
-
-  get option(): string {
-    let value = this.get("option");
-    return value.toString();
-  }
-
-  set option(value: string) {
-    this.set("option", Value.fromString(value));
-  }
-}
-
-export class Expire extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Expire entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Expire entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Expire", id.toString(), this);
-  }
-
-  static load(id: string): Expire | null {
-    return store.get("Expire", id) as Expire | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
-    return value.toBigInt();
-  }
-
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
-  }
-
-  get timestamp(): BigInt {
-    let value = this.get("timestamp");
-    return value.toBigInt();
-  }
-
-  set timestamp(value: BigInt) {
-    this.set("timestamp", Value.fromBigInt(value));
-  }
-
-  get profit(): BigInt {
-    let value = this.get("profit");
-    return value.toBigInt();
-  }
-
-  set profit(value: BigInt) {
-    this.set("profit", Value.fromBigInt(value));
+  set pool(value: string) {
+    this.set("pool", Value.fromString(value));
   }
 
   get option(): string {
@@ -498,13 +382,13 @@ export class Claim extends Entity {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get amount(): BigDecimal {
+  get amount(): BigInt {
     let value = this.get("amount");
-    return value.toBigDecimal();
+    return value.toBigInt();
   }
 
-  set amount(value: BigDecimal) {
-    this.set("amount", Value.fromBigDecimal(value));
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
   }
 
   get account(): string {
@@ -650,31 +534,31 @@ export class HegicOption extends Entity {
     this.set("holder", Value.fromString(value));
   }
 
-  get premium(): BigDecimal {
+  get premium(): BigInt {
     let value = this.get("premium");
-    return value.toBigDecimal();
+    return value.toBigInt();
   }
 
-  set premium(value: BigDecimal) {
-    this.set("premium", Value.fromBigDecimal(value));
+  set premium(value: BigInt) {
+    this.set("premium", Value.fromBigInt(value));
   }
 
-  get strike(): BigDecimal {
+  get strike(): BigInt {
     let value = this.get("strike");
-    return value.toBigDecimal();
+    return value.toBigInt();
   }
 
-  set strike(value: BigDecimal) {
-    this.set("strike", Value.fromBigDecimal(value));
+  set strike(value: BigInt) {
+    this.set("strike", Value.fromBigInt(value));
   }
 
-  get amount(): BigDecimal {
+  get amount(): BigInt {
     let value = this.get("amount");
-    return value.toBigDecimal();
+    return value.toBigInt();
   }
 
-  set amount(value: BigDecimal) {
-    this.set("amount", Value.fromBigDecimal(value));
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
   }
 
   get expiration(): BigInt {
@@ -704,38 +588,13 @@ export class HegicOption extends Entity {
     this.set("state", Value.fromString(value));
   }
 
-  get exercise(): string | null {
-    let value = this.get("exercise");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toString();
-    }
+  get settlementFee(): BigInt {
+    let value = this.get("settlementFee");
+    return value.toBigInt();
   }
 
-  set exercise(value: string | null) {
-    if (value === null) {
-      this.unset("exercise");
-    } else {
-      this.set("exercise", Value.fromString(value as string));
-    }
-  }
-
-  get expire(): string | null {
-    let value = this.get("expire");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set expire(value: string | null) {
-    if (value === null) {
-      this.unset("expire");
-    } else {
-      this.set("expire", Value.fromString(value as string));
-    }
+  set settlementFee(value: BigInt) {
+    this.set("settlementFee", Value.fromBigInt(value));
   }
 }
 
