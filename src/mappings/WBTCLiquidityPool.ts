@@ -5,7 +5,7 @@ import {
   Withdraw as WithdrawEvent
 } from "../types/WBTCLiquidityPool/LiquidityPool";
 import { 
-  LiquidityPool,
+  OptionPool,
   Provide,
   Withdraw,
   Profit,

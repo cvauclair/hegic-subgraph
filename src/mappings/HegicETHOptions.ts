@@ -1,7 +1,7 @@
 import { Create, Exercise, Expire } from '../types/HegicETHOptions/HegicOptions'
-import { Asset, HegicOption, LiquidityPool } from '../types/schema'
+import { Asset, HegicOption, OptionPool } from '../types/schema'
 import { HegicOptions as Contract } from '../types/HegicETHOptions/HegicOptions'
-import { Address } from '@graphprotocol/graph-ts';
+import { Address, log } from '@graphprotocol/graph-ts';
 import { BigIntOne, BigIntZero, ETH_OPTIONS_ADDR, getCreateETHPool } from "../utils";
 
 export function handleCreate(event: Create): void {
@@ -47,15 +47,23 @@ export function handleCreate(event: Create): void {
   
   // Save entities
   liquidity_pool.numOptions = liquidity_pool.numOptions + BigIntOne;
+  
   let options = liquidity_pool.options;
   options.push(option.id);
   liquidity_pool.options = options;
+  
+  liquidity_pool.totalSettlementFees = liquidity_pool.totalSettlementFees + option.settlementFee;
+  liquidity_pool.totalFees = liquidity_pool.totalFees + event.params.totalFee;
+
   liquidity_pool.save()
   
   option.save()
 };
 
 export function handleExercise(event: Exercise): void {
+  let liquidity_pool = getCreateETHPool()
+  liquidity_pool.numExercisedOptions = liquidity_pool.numExercisedOptions + BigIntOne
+
   let option = HegicOption.load("ETH-" + event.params.id.toString())
   if (option == null) {
     return
@@ -66,6 +74,9 @@ export function handleExercise(event: Exercise): void {
 }
 
 export function handleExpire(event: Expire): void {
+  let liquidity_pool = getCreateETHPool()
+  liquidity_pool.numExpiredOptions = liquidity_pool.numExpiredOptions + BigIntOne
+
   let option = HegicOption.load("ETH-" + event.params.id.toString())
   if (option == null) {
     return

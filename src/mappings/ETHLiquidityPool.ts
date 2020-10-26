@@ -5,7 +5,7 @@ import {
   Withdraw as WithdrawEvent
 } from "../types/ETHLiquidityPool/LiquidityPool";
 import { 
-  LiquidityPool,
+  OptionPool,
   Provide,
   Withdraw,
   Profit,

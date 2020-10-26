@@ -598,7 +598,7 @@ export class HegicOption extends Entity {
   }
 }
 
-export class LiquidityPool extends Entity {
+export class OptionPool extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -606,17 +606,17 @@ export class LiquidityPool extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save LiquidityPool entity without an ID");
+    assert(id !== null, "Cannot save OptionPool entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save LiquidityPool entity with non-string ID. " +
+      "Cannot save OptionPool entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("LiquidityPool", id.toString(), this);
+    store.set("OptionPool", id.toString(), this);
   }
 
-  static load(id: string): LiquidityPool | null {
-    return store.get("LiquidityPool", id) as LiquidityPool | null;
+  static load(id: string): OptionPool | null {
+    return store.get("OptionPool", id) as OptionPool | null;
   }
 
   get id(): string {
@@ -644,6 +644,24 @@ export class LiquidityPool extends Entity {
 
   set numOptions(value: BigInt) {
     this.set("numOptions", Value.fromBigInt(value));
+  }
+
+  get numExpiredOptions(): BigInt {
+    let value = this.get("numExpiredOptions");
+    return value.toBigInt();
+  }
+
+  set numExpiredOptions(value: BigInt) {
+    this.set("numExpiredOptions", Value.fromBigInt(value));
+  }
+
+  get numExercisedOptions(): BigInt {
+    let value = this.get("numExercisedOptions");
+    return value.toBigInt();
+  }
+
+  set numExercisedOptions(value: BigInt) {
+    this.set("numExercisedOptions", Value.fromBigInt(value));
   }
 
   get options(): Array<string | null> {
@@ -793,5 +811,41 @@ export class LiquidityPool extends Entity {
     } else {
       this.set("latestLoss", Value.fromString(value as string));
     }
+  }
+
+  get totalSettlementFees(): BigInt {
+    let value = this.get("totalSettlementFees");
+    return value.toBigInt();
+  }
+
+  set totalSettlementFees(value: BigInt) {
+    this.set("totalSettlementFees", Value.fromBigInt(value));
+  }
+
+  get totalFees(): BigInt {
+    let value = this.get("totalFees");
+    return value.toBigInt();
+  }
+
+  set totalFees(value: BigInt) {
+    this.set("totalFees", Value.fromBigInt(value));
+  }
+
+  get totalPutVolume(): BigInt {
+    let value = this.get("totalPutVolume");
+    return value.toBigInt();
+  }
+
+  set totalPutVolume(value: BigInt) {
+    this.set("totalPutVolume", Value.fromBigInt(value));
+  }
+
+  get totalCallVolume(): BigInt {
+    let value = this.get("totalCallVolume");
+    return value.toBigInt();
+  }
+
+  set totalCallVolume(value: BigInt) {
+    this.set("totalCallVolume", Value.fromBigInt(value));
   }
 }

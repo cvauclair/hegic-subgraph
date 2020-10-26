@@ -11,7 +11,7 @@ type Provide @entity {
   amount: BigInt!
   numWriteTokens: BigInt!
 
-  pool: LiquidityPool! @derivedFrom(field: "provides")
+  pool: OptionPool! @derivedFrom(field: "provides")
 }
 
 type Withdraw @entity {
@@ -24,7 +24,7 @@ type Withdraw @entity {
   amount: BigInt!
   numWriteTokens: BigInt!
 
-  pool: LiquidityPool!  @derivedFrom(field: "withdraws")
+  pool: OptionPool!  @derivedFrom(field: "withdraws")
 }
 
 type Profit @entity {
@@ -34,7 +34,7 @@ type Profit @entity {
   timestamp: BigInt!
 
   amount: BigInt!
-  pool: LiquidityPool! @derivedFrom(field: "profits")
+  pool: OptionPool! @derivedFrom(field: "profits")
   option: HegicOption!
 }
 
@@ -45,29 +45,9 @@ type Loss @entity {
   timestamp: BigInt!
 
   amount: BigInt!
-  pool: LiquidityPool! @derivedFrom(field: "losses")
+  pool: OptionPool! @derivedFrom(field: "losses")
   option: HegicOption!
 }
-
-# type Exercise @entity {
-#   id: ID! # POOL_ADDRESS-OPTION_ID
-
-#   blockNumber: BigInt!
-#   timestamp: BigInt!
-
-#   profit: BigInt!
-#   option: HegicOption! @derivedFrom(field: "exercise")
-# }
-
-# type Expire @entity {
-#   id: ID! # POOL_ADDRESS-OPTION_ID
-
-#   blockNumber: BigInt!
-#   timestamp: BigInt!
-
-#   profit: BigInt!
-#   option: HegicOption! @derivedFrom(field: "expire")
-# }
 
 type Claim @entity {
   id: ID!
@@ -122,13 +102,16 @@ type HegicOption @entity {
 }
 
 # ================================================================
-# Liquidity pools and staking
+# Option pools and staking
 # ================================================================
-type LiquidityPool @entity {
+type OptionPool @entity {
   id: ID! # POOL_ADDR
 
   underlying: Asset!
+
   numOptions: BigInt!
+  numExpiredOptions: BigInt!
+  numExercisedOptions: BigInt!
   options: [HegicOption]!
 
   numProvides: BigInt!
@@ -146,4 +129,11 @@ type LiquidityPool @entity {
   numLosses: BigInt!
   losses: [Loss]!
   latestLoss: Loss
+
+  # Cummulative stats
+  totalSettlementFees: BigInt!
+  totalFees: BigInt!    # settlement + premiums
+  
+  totalPutVolume: BigInt!
+  totalCallVolume: BigInt!
 }
