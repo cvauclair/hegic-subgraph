@@ -34,7 +34,8 @@ type Profit @entity {
   timestamp: BigInt!
 
   amount: BigDecimal!
-  option: LiquidityPool! @derivedFrom(field: "profits")
+  pool: LiquidityPool! @derivedFrom(field: "profits")
+  option: HegicOption!
 }
 
 type Loss @entity {
@@ -44,7 +45,8 @@ type Loss @entity {
   timestamp: BigInt!
 
   amount: BigDecimal!
-  option: LiquidityPool! @derivedFrom(field: "losses")
+  pool: LiquidityPool! @derivedFrom(field: "losses")
+  option: HegicOption!
 }
 
 type Exercise @entity {

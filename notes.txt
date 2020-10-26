@@ -24,6 +24,7 @@ EACAggregatorProxy (BTC price oracle): 0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88
 Liquidity pools
 ================================================================
 HegicETHPool: 0x878F15ffC8b894A1BA7647c7176E4C01f74e140b
+HegicERCPool: 0x20DD9e22d22dd0a6ef74a520cb08303B5faD5dE7
 
 Events:
 - Provide(account, amount, writeAmount)
