@@ -11,7 +11,7 @@ type Provide @entity {
   amount: BigInt!
   numWriteTokens: BigInt!
 
-  pool: LiquidityPool!  @derivedFrom(field: "provide")
+  pool: LiquidityPool!  @derivedFrom(field: "provides")
 }
 
 type Withdraw @entity {
@@ -24,7 +24,7 @@ type Withdraw @entity {
   amount: BigInt!
   numWriteTokens: BigInt!
 
-  pool: LiquidityPool!  @derivedFrom(field: "withdraw")
+  pool: LiquidityPool!  @derivedFrom(field: "withdraws")
 }
 
 type Profit @entity {
@@ -34,7 +34,7 @@ type Profit @entity {
   timestamp: BigInt!
 
   amount: BigDecimal!
-  option: HegicOption! @derivedFrom(field: "profits")
+  option: LiquidityPool! @derivedFrom(field: "profits")
 }
 
 type Loss @entity {
@@ -44,7 +44,7 @@ type Loss @entity {
   timestamp: BigInt!
 
   amount: BigDecimal!
-  option: HegicOption! @derivedFrom(field: "losses")
+  option: LiquidityPool! @derivedFrom(field: "losses")
 }
 
 type Exercise @entity {
@@ -130,19 +130,19 @@ type LiquidityPool @entity {
   numOptions: BigInt!
   options: [HegicOption]!
 
-  numProvideEvents: BigInt!
-  provideEvents: [Provide]!
-  latestProvideEvent: Provide
+  numProvides: BigInt!
+  provides: [Provide]!
+  latestProvide: Provide
 
-  numWithdrawEvents: BigInt!
-  withdrawEvents: [Withdraw]!
-  latestWithdrawEvent: Withdraw
+  numWithdraws: BigInt!
+  withdraws: [Withdraw]!
+  latestWithdraw: Withdraw
 
-  numProfitEvents: BigInt!
-  profitEvents: [Profit]!
-  latestProfitEvent: Profit
+  numProfits: BigInt!
+  profits: [Profit]!
+  latestProfit: Profit
 
-  numLossEvents: BigInt!
-  lossEvents: [Loss]!
-  latestLossEvent: Loss
+  numLosses: BigInt!
+  losses: [Loss]!
+  latestLoss: Loss
 }

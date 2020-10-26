@@ -11,7 +11,7 @@ where settlementFee = amount to be distributed to HEGIC holders and totalFee = t
 - Expire(id, premium)
 
 Misc:
-- Call impliedVolRate to get IV (in )
+- Call impliedVolRate to get IV
 
 ================================================================
 Oracles
