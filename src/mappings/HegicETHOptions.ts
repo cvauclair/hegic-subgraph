@@ -2,48 +2,16 @@ import { Create, Exercise, Expire } from '../types/HegicETHOptions/HegicOptions'
 import { Asset, HegicOption, LiquidityPool } from '../types/schema'
 import { HegicOptions as Contract } from '../types/HegicETHOptions/HegicOptions'
 import { Address } from '@graphprotocol/graph-ts';
-import { BigIntOne, BigIntZero } from "../utils";
-
-let ETH_OPTIONS = "0xefc0eeadc1132a12c9487d800112693bf49ecfa2";
-let ETH_ADDR = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+import { BigIntOne, BigIntZero, ETH_OPTIONS_ADDR, getCreateETHPool } from "../utils";
 
 export function handleCreate(event: Create): void {
-  let ethOptions = Contract.bind(Address.fromString(ETH_OPTIONS));
-
-  // Check if underlying asset exists
-  let underlying = Asset.load(ETH_ADDR);
-  if (underlying == null) {
-    underlying = new Asset(ETH_ADDR);
-    underlying.symbol = "ETH";
-    underlying.name = "Ether";
-    underlying.decimals = 18;
-    underlying.impliedVolatility = ethOptions.impliedVolRate();
-    underlying.save()
-  }
-
-  // Check if pool exists
-  let pool_addr = ethOptions.pool().toHexString().toString();
-  let liquidity_pool = LiquidityPool.load(pool_addr)
-  if (liquidity_pool == null) {
-    liquidity_pool = new LiquidityPool(pool_addr)
-    liquidity_pool.underlying = underlying.id;
-    liquidity_pool.numOptions = BigIntZero;
-    liquidity_pool.options = [];
-
-    liquidity_pool.numProvides = BigIntZero;
-    liquidity_pool.provides = [];
-    liquidity_pool.numWithdraws = BigIntZero;
-    liquidity_pool.withdraws = [];
-    liquidity_pool.numProfits = BigIntZero;
-    liquidity_pool.profits = [];
-    liquidity_pool.numLosses = BigIntZero;
-    liquidity_pool.losses = [];
-  }
+  let ethOptions = Contract.bind(Address.fromString(ETH_OPTIONS_ADDR));
+  let liquidity_pool = getCreateETHPool()
 
   // Create option
   let option = new HegicOption("ETH-" + event.params.id.toString());
 
-  option.underlying = underlying.id;
+  option.underlying = liquidity_pool.underlying;
   option.creationBlock = event.block.number;
   option.creationTimestamp = event.block.timestamp;
   option.holder = event.params.account.toHexString().toString();
@@ -88,9 +56,21 @@ export function handleCreate(event: Create): void {
 };
 
 export function handleExercise(event: Exercise): void {
+  let option = HegicOption.load("ETH-" + event.params.id.toString())
+  if (option == null) {
+    return
+  }
 
+  option.state = "Exercised"
+  option.save()
 }
 
 export function handleExpire(event: Expire): void {
-  
+  let option = HegicOption.load("ETH-" + event.params.id.toString())
+  if (option == null) {
+    return
+  }
+
+  option.state = "Expired"
+  option.save()
 }
