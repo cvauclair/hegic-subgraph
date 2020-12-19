@@ -26,8 +26,10 @@ export function handleCreate(event: Create): void {
 
   if (option_data.value7 == 1) {
     option.type = "Put";
+    liquidity_pool.totalPutVolume = liquidity_pool.totalPutVolume + option.premium
   } else if (option_data.value7 == 2) {
     option.type = "Call";
+    liquidity_pool.totalCallVolume = liquidity_pool.totalCallVolume + option.premium
   } else {
     return
   }
