@@ -207,3 +207,33 @@ export class HegicOptions extends SmartContract {
     return CallResult.fromValue(value[0].toAddress());
   }
 }
+
+export class SetImpliedVolRateCall extends EthereumCall {
+  get inputs(): SetImpliedVolRateCall__Inputs {
+    return new SetImpliedVolRateCall__Inputs(this);
+  }
+
+  get outputs(): SetImpliedVolRateCall__Outputs {
+    return new SetImpliedVolRateCall__Outputs(this);
+  }
+}
+
+export class SetImpliedVolRateCall__Inputs {
+  _call: SetImpliedVolRateCall;
+
+  constructor(call: SetImpliedVolRateCall) {
+    this._call = call;
+  }
+
+  get value(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class SetImpliedVolRateCall__Outputs {
+  _call: SetImpliedVolRateCall;
+
+  constructor(call: SetImpliedVolRateCall) {
+    this._call = call;
+  }
+}

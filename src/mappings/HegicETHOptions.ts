@@ -1,5 +1,5 @@
-import { Create, Exercise, Expire } from '../types/HegicETHOptions/HegicOptions'
-import { Asset, HegicOption, OptionPool } from '../types/schema'
+import { Create, Exercise, Expire, SetImpliedVolRateCall } from '../types/HegicETHOptions/HegicOptions'
+import { Asset, HegicOption, ImpliedVolatily } from '../types/schema'
 import { HegicOptions as Contract } from '../types/HegicETHOptions/HegicOptions'
 import { Address, log } from '@graphprotocol/graph-ts';
 import { BigIntOne, BigIntZero, ETH_OPTIONS_ADDR, getCreateETHPool } from "../utils";
@@ -10,14 +10,13 @@ export function handleCreate(event: Create): void {
 
   // Create option
   let option = new HegicOption("ETH-" + event.params.id.toString());
-
   option.underlying = liquidity_pool.underlying;
   option.creationBlock = event.block.number;
   option.creationTimestamp = event.block.timestamp;
   option.holder = event.params.account.toHexString().toString();
   option.premium = event.params.totalFee - event.params.settlementFee;
   option.settlementFee = event.params.settlementFee;
-  
+
   // Get from state 
   let option_data = ethOptions.options(event.params.id)
   
@@ -27,8 +26,10 @@ export function handleCreate(event: Create): void {
 
   if (option_data.value7 == 1) {
     option.type = "Put";
+    liquidity_pool.totalPutVolume = liquidity_pool.totalPutVolume + option.premium
   } else if (option_data.value7 == 2) {
     option.type = "Call";
+    liquidity_pool.totalCallVolume = liquidity_pool.totalCallVolume + option.premium
   } else {
     return
   }
@@ -84,4 +85,21 @@ export function handleExpire(event: Expire): void {
 
   option.state = "Expired"
   option.save()
+}
+
+export function setImpliedVolRate(call: SetImpliedVolRateCall): void {
+  let liquidity_pool = getCreateETHPool()
+  liquidity_pool.numImpliedVolatility = liquidity_pool.numImpliedVolatility + BigIntOne
+
+  let iv = new ImpliedVolatily("ETH-" + liquidity_pool.numImpliedVolatility.toString())
+  iv.blockNumber = call.block.number
+  iv.timestamp = call.block.timestamp
+  iv.impliedVolatility = call.inputs.value
+  iv.save()
+
+  let ivs = liquidity_pool.impliedVolatility
+  ivs.push(iv.id)
+  liquidity_pool.impliedVolatility = ivs
+  liquidity_pool.latestImpliedVolatility = iv.id
+  liquidity_pool.save()
 }

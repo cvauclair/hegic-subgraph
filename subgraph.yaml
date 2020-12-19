@@ -1,7 +1,6 @@
 specVersion: 0.0.2
 description: Hegic is a decentralized pooled options protocol.
-# repository: https://github.com/graphprotocol/uniswap-subgraph
-
+repository: https://github.com/cvauclair/hegic-subgraph/
 schema:
   file: ./schema.graphql
 dataSources:
@@ -34,6 +33,9 @@ dataSources:
           handler: handleExercise
         - event: Expire(indexed uint256,uint256)
           handler: handleExpire
+      callHandlers:
+        - function: setImpliedVolRate(uint256)
+          handler: handleSetImpliedVolRate
   - kind: ethereum/contract
     name: HegicETHOptions
     network: mainnet
@@ -63,6 +65,9 @@ dataSources:
           handler: handleExercise
         - event: Expire(indexed uint256,uint256)
           handler: handleExpire
+      callHandlers:
+        - function: setImpliedVolRate(uint256)
+          handler: handleSetImpliedVolRate
   - kind: ethereum/contract
     name: WBTCLiquidityPool
     network: mainnet

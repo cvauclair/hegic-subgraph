@@ -5,7 +5,6 @@ import {
   Withdraw as WithdrawEvent
 } from "../types/ETHLiquidityPool/LiquidityPool";
 import { 
-  OptionPool,
   Provide,
   Withdraw,
   Profit,
@@ -14,7 +13,7 @@ import {
 import { BigIntOne, getCreateETHPool } from "../utils";
 
 export function handleProvide(event: ProvideEvent): void {
-  let liquidity_pool = getCreateETHPool();
+  let liquidity_pool = getCreateETHPool();    
 
   let provide = new Provide(liquidity_pool.id + "-" + liquidity_pool.numProvides.toString());
   provide.blockNumber = event.block.number
@@ -27,6 +26,8 @@ export function handleProvide(event: ProvideEvent): void {
   let provides = liquidity_pool.provides;
   provides.push(provide.id);
   liquidity_pool.provides = provides;
+
+  liquidity_pool.liquidity = liquidity_pool.liquidity + provide.amount
 
   liquidity_pool.numProvides = liquidity_pool.numProvides + BigIntOne;
   liquidity_pool.latestProvide = provide.id
@@ -47,6 +48,8 @@ export function handleWithdraw(event: WithdrawEvent): void {
   let withdraws = liquidity_pool.withdraws;
   withdraws.push(withdraw.id);
   liquidity_pool.withdraws = withdraws;
+
+  liquidity_pool.liquidity = liquidity_pool.liquidity - withdraw.amount
 
   liquidity_pool.numWithdraws = liquidity_pool.numWithdraws + BigIntOne;
   liquidity_pool.latestWithdraw = withdraw.id
@@ -69,6 +72,7 @@ export function handleProfit(event: ProfitEvent): void {
 
   liquidity_pool.numProfits = liquidity_pool.numProfits + BigIntOne;
   liquidity_pool.latestProfit = profit.id
+  liquidity_pool.totalProfits = liquidity_pool.totalProfits + profit.amount
   liquidity_pool.save()
 }
 
@@ -85,6 +89,7 @@ export function handleLoss(event: LossEvent): void {
   let losses = liquidity_pool.losses;
   losses.push(loss.id);
   liquidity_pool.losses = losses;
+  liquidity_pool.totalLosses = liquidity_pool.totalLosses + loss.amount
 
   liquidity_pool.numLosses = liquidity_pool.numLosses + BigIntOne;
   liquidity_pool.latestProfit = loss.id

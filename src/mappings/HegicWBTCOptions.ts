@@ -1,5 +1,5 @@
-import { Create, Exercise, Expire } from '../types/HegicWBTCOptions/HegicOptions'
-import { Asset, HegicOption, OptionPool } from '../types/schema'
+import { Create, Exercise, Expire, SetImpliedVolRateCall } from '../types/HegicWBTCOptions/HegicOptions'
+import { Asset, HegicOption, ImpliedVolatily } from '../types/schema'
 import { HegicOptions as Contract } from '../types/HegicWBTCOptions/HegicOptions'
 import { Address } from '@graphprotocol/graph-ts';
 import { BigIntOne, BigIntZero, getCreateWBTCPool, WBTC_OPTIONS_ADDR } from "../utils";
@@ -10,7 +10,6 @@ export function handleCreate(event: Create): void {
 
   // Create option
   let option = new HegicOption("WBTC-" + event.params.id.toString());
-
   option.underlying = liquidity_pool.underlying;
   option.creationBlock = event.block.number;
   option.creationTimestamp = event.block.timestamp;
@@ -84,4 +83,21 @@ export function handleExpire(event: Expire): void {
 
   option.state = "Expired"
   option.save()
+}
+
+export function setImpliedVolRate(call: SetImpliedVolRateCall): void {
+  let liquidity_pool = getCreateWBTCPool()
+  liquidity_pool.numImpliedVolatility = liquidity_pool.numImpliedVolatility + BigIntOne
+
+  let iv = new ImpliedVolatily("WBTC-" + liquidity_pool.numImpliedVolatility.toString())
+  iv.blockNumber = call.block.number
+  iv.timestamp = call.block.timestamp
+  iv.impliedVolatility = call.inputs.value
+  iv.save()
+
+  let ivs = liquidity_pool.impliedVolatility
+  ivs.push(iv.id)
+  liquidity_pool.impliedVolatility = ivs
+  liquidity_pool.latestImpliedVolatility = iv.id
+  liquidity_pool.save()
 }

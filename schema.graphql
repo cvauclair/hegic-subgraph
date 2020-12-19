@@ -11,7 +11,7 @@ type Provide @entity {
   amount: BigInt!
   numWriteTokens: BigInt!
 
-  pool: OptionPool! @derivedFrom(field: "provides")
+  pool: LiquidityPool! @derivedFrom(field: "provides")
 }
 
 type Withdraw @entity {
@@ -24,7 +24,7 @@ type Withdraw @entity {
   amount: BigInt!
   numWriteTokens: BigInt!
 
-  pool: OptionPool!  @derivedFrom(field: "withdraws")
+  pool: LiquidityPool!  @derivedFrom(field: "withdraws")
 }
 
 type Profit @entity {
@@ -34,7 +34,7 @@ type Profit @entity {
   timestamp: BigInt!
 
   amount: BigInt!
-  pool: OptionPool! @derivedFrom(field: "profits")
+  pool: LiquidityPool! @derivedFrom(field: "profits")
   option: HegicOption!
 }
 
@@ -45,7 +45,7 @@ type Loss @entity {
   timestamp: BigInt!
 
   amount: BigInt!
-  pool: OptionPool! @derivedFrom(field: "losses")
+  pool: LiquidityPool! @derivedFrom(field: "losses")
   option: HegicOption!
 }
 
@@ -62,13 +62,20 @@ type Claim @entity {
 # ================================================================
 # Assets and options
 # ================================================================
+type ImpliedVolatily @entity {
+  id: ID!
+
+  blockNumber: BigInt!
+  timestamp: BigInt!
+
+  impliedVolatility: BigInt!
+}
+
 type Asset @entity {
   id: ID! # id is token address, with 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE for ETH
   symbol: String!
   name: String!
   decimals: Int!
-
-  impliedVolatility: BigInt!
 }
 
 enum OptionState {
@@ -104,7 +111,7 @@ type HegicOption @entity {
 # ================================================================
 # Option pools and staking
 # ================================================================
-type OptionPool @entity {
+type LiquidityPool @entity {
   id: ID! # POOL_ADDR
 
   underlying: Asset!
@@ -122,13 +129,17 @@ type OptionPool @entity {
   withdraws: [Withdraw]!
   latestWithdraw: Withdraw
 
+  liquidity: BigInt!
+
   numProfits: BigInt!
   profits: [Profit]!
   latestProfit: Profit
+  totalProfits: BigInt!
 
   numLosses: BigInt!
   losses: [Loss]!
   latestLoss: Loss
+  totalLosses: BigInt!
 
   # Cummulative stats
   totalSettlementFees: BigInt!
@@ -136,4 +147,9 @@ type OptionPool @entity {
   
   totalPutVolume: BigInt!
   totalCallVolume: BigInt!
+
+  # Implied volatility timeseries
+  numImpliedVolatility: BigInt!
+  impliedVolatility: [ImpliedVolatily]!
+  latestImpliedVolatility: ImpliedVolatily
 }

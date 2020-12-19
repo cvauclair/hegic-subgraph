@@ -401,6 +401,64 @@ export class Claim extends Entity {
   }
 }
 
+export class ImpliedVolatily extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save ImpliedVolatily entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save ImpliedVolatily entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("ImpliedVolatily", id.toString(), this);
+  }
+
+  static load(id: string): ImpliedVolatily | null {
+    return store.get("ImpliedVolatily", id) as ImpliedVolatily | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
+    return value.toBigInt();
+  }
+
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get impliedVolatility(): BigInt {
+    let value = this.get("impliedVolatility");
+    return value.toBigInt();
+  }
+
+  set impliedVolatility(value: BigInt) {
+    this.set("impliedVolatility", Value.fromBigInt(value));
+  }
+}
+
 export class Asset extends Entity {
   constructor(id: string) {
     super();
@@ -456,15 +514,6 @@ export class Asset extends Entity {
 
   set decimals(value: i32) {
     this.set("decimals", Value.fromI32(value));
-  }
-
-  get impliedVolatility(): BigInt {
-    let value = this.get("impliedVolatility");
-    return value.toBigInt();
-  }
-
-  set impliedVolatility(value: BigInt) {
-    this.set("impliedVolatility", Value.fromBigInt(value));
   }
 }
 
@@ -598,7 +647,7 @@ export class HegicOption extends Entity {
   }
 }
 
-export class OptionPool extends Entity {
+export class LiquidityPool extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -606,17 +655,17 @@ export class OptionPool extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save OptionPool entity without an ID");
+    assert(id !== null, "Cannot save LiquidityPool entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save OptionPool entity with non-string ID. " +
+      "Cannot save LiquidityPool entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("OptionPool", id.toString(), this);
+    store.set("LiquidityPool", id.toString(), this);
   }
 
-  static load(id: string): OptionPool | null {
-    return store.get("OptionPool", id) as OptionPool | null;
+  static load(id: string): LiquidityPool | null {
+    return store.get("LiquidityPool", id) as LiquidityPool | null;
   }
 
   get id(): string {
@@ -743,6 +792,15 @@ export class OptionPool extends Entity {
     }
   }
 
+  get liquidity(): BigInt {
+    let value = this.get("liquidity");
+    return value.toBigInt();
+  }
+
+  set liquidity(value: BigInt) {
+    this.set("liquidity", Value.fromBigInt(value));
+  }
+
   get numProfits(): BigInt {
     let value = this.get("numProfits");
     return value.toBigInt();
@@ -776,6 +834,15 @@ export class OptionPool extends Entity {
     } else {
       this.set("latestProfit", Value.fromString(value as string));
     }
+  }
+
+  get totalProfits(): BigInt {
+    let value = this.get("totalProfits");
+    return value.toBigInt();
+  }
+
+  set totalProfits(value: BigInt) {
+    this.set("totalProfits", Value.fromBigInt(value));
   }
 
   get numLosses(): BigInt {
@@ -813,6 +880,15 @@ export class OptionPool extends Entity {
     }
   }
 
+  get totalLosses(): BigInt {
+    let value = this.get("totalLosses");
+    return value.toBigInt();
+  }
+
+  set totalLosses(value: BigInt) {
+    this.set("totalLosses", Value.fromBigInt(value));
+  }
+
   get totalSettlementFees(): BigInt {
     let value = this.get("totalSettlementFees");
     return value.toBigInt();
@@ -847,5 +923,40 @@ export class OptionPool extends Entity {
 
   set totalCallVolume(value: BigInt) {
     this.set("totalCallVolume", Value.fromBigInt(value));
+  }
+
+  get numImpliedVolatility(): BigInt {
+    let value = this.get("numImpliedVolatility");
+    return value.toBigInt();
+  }
+
+  set numImpliedVolatility(value: BigInt) {
+    this.set("numImpliedVolatility", Value.fromBigInt(value));
+  }
+
+  get impliedVolatility(): Array<string | null> {
+    let value = this.get("impliedVolatility");
+    return value.toStringArray();
+  }
+
+  set impliedVolatility(value: Array<string | null>) {
+    this.set("impliedVolatility", Value.fromStringArray(value));
+  }
+
+  get latestImpliedVolatility(): string | null {
+    let value = this.get("latestImpliedVolatility");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set latestImpliedVolatility(value: string | null) {
+    if (value === null) {
+      this.unset("latestImpliedVolatility");
+    } else {
+      this.set("latestImpliedVolatility", Value.fromString(value as string));
+    }
   }
 }
