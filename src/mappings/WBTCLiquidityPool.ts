@@ -29,6 +29,9 @@ export function handleProvide(event: ProvideEvent): void {
 
   liquidity_pool.numProvides = liquidity_pool.numProvides + BigIntOne;
   liquidity_pool.latestProvide = provide.id
+
+  liquidity_pool.liquidity = liquidity_pool.liquidity + provide.amount
+
   liquidity_pool.save()
 }
 
@@ -47,8 +50,11 @@ export function handleWithdraw(event: WithdrawEvent): void {
   withdraws.push(withdraw.id);
   liquidity_pool.withdraws = withdraws;
 
-  liquidity_pool.numWithdraws = liquidity_pool.numWithdraws + BigIntOne;
+  liquidity_pool.numWithdraws = liquidity_pool.numWithdraws + BigIntOne
   liquidity_pool.latestWithdraw = withdraw.id
+
+  liquidity_pool.liquidity = liquidity_pool.liquidity - withdraw.amount
+
   liquidity_pool.save()
 }
 
@@ -68,6 +74,9 @@ export function handleProfit(event: ProfitEvent): void {
 
   liquidity_pool.numProfits = liquidity_pool.numProfits + BigIntOne;
   liquidity_pool.latestProfit = profit.id
+
+  liquidity_pool.totalProfits = liquidity_pool.totalProfits + profit.amount
+
   liquidity_pool.save()
 }
 
@@ -87,5 +96,8 @@ export function handleLoss(event: LossEvent): void {
 
   liquidity_pool.numLosses = liquidity_pool.numLosses + BigIntOne;
   liquidity_pool.latestProfit = loss.id
+  
+  liquidity_pool.totalLosses = liquidity_pool.totalLosses + loss.amount
+
   liquidity_pool.save()
 }

@@ -27,10 +27,11 @@ export function handleProvide(event: ProvideEvent): void {
   provides.push(provide.id);
   liquidity_pool.provides = provides;
 
+  liquidity_pool.numProvides = liquidity_pool.numProvides + BigIntOne
+  liquidity_pool.latestProvide = provide.id
+
   liquidity_pool.liquidity = liquidity_pool.liquidity + provide.amount
 
-  liquidity_pool.numProvides = liquidity_pool.numProvides + BigIntOne;
-  liquidity_pool.latestProvide = provide.id
   liquidity_pool.save()
 }
 
@@ -49,10 +50,11 @@ export function handleWithdraw(event: WithdrawEvent): void {
   withdraws.push(withdraw.id);
   liquidity_pool.withdraws = withdraws;
 
-  liquidity_pool.liquidity = liquidity_pool.liquidity - withdraw.amount
-
   liquidity_pool.numWithdraws = liquidity_pool.numWithdraws + BigIntOne;
   liquidity_pool.latestWithdraw = withdraw.id
+
+  liquidity_pool.liquidity = liquidity_pool.liquidity - withdraw.amount
+
   liquidity_pool.save()
 }
 

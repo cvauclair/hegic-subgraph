@@ -87,7 +87,7 @@ export function handleExpire(event: Expire): void {
   option.save()
 }
 
-export function setImpliedVolRate(call: SetImpliedVolRateCall): void {
+export function handleSetImpliedVolRate(call: SetImpliedVolRateCall): void {
   let liquidity_pool = getCreateETHPool()
   liquidity_pool.numImpliedVolatility = liquidity_pool.numImpliedVolatility + BigIntOne
 

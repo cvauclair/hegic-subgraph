@@ -1,5 +1,5 @@
 import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts'
-import { Asset, LiquidityPool } from './types/schema'
+import { Asset, ImpliedVolatily, LiquidityPool } from './types/schema'
 import { HegicOptions as Contract } from './types/HegicWBTCOptions/HegicOptions'
 
 export const BigIntZero =  BigInt.fromI32(0)
@@ -11,7 +11,7 @@ export const WBTC_OPTIONS_ADDR = "0x3961245db602ed7c03eeccda33ea3846bd8723bd";
 export const WBTC_POOL_ADDR = "0x20dd9e22d22dd0a6ef74a520cb08303b5fad5de7"
 export const WBTC_ADDR = "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599";
 
-export function initLiquidityPool(address: string, underlying: Asset): LiquidityPool {
+export function initLiquidityPool(address: string, options_addr: string, underlying: Asset): LiquidityPool {
   // Create pool
   let liquidity_pool = new LiquidityPool(address)
   liquidity_pool.underlying = underlying.id;
@@ -38,8 +38,19 @@ export function initLiquidityPool(address: string, underlying: Asset): Liquidity
   liquidity_pool.totalFees = BigIntZero;
   liquidity_pool.totalPutVolume = BigIntZero;
   liquidity_pool.totalCallVolume = BigIntZero;
-  liquidity_pool.numImpliedVolatility = BigIntZero;
-  liquidity_pool.impliedVolatility = [];
+
+  liquidity_pool.numImpliedVolatility = BigIntZero
+  liquidity_pool.impliedVolatility = []
+  // let contract = Contract.bind(Address.fromString(options_addr));
+  // let iv = new ImpliedVolatily(underlying.symbol + "-" + liquidity_pool.numImpliedVolatility.toString())
+  // iv.blockNumber = BigInt.fromI32(11029620)
+  // iv.timestamp = BigInt.fromI32(1602315209)
+  // iv.impliedVolatility = contract.impliedVolRate()
+  // iv.save()
+
+  // liquidity_pool.numImpliedVolatility = BigIntOne
+  // liquidity_pool.impliedVolatility = [iv.id]
+  // liquidity_pool.latestImpliedVolatility = iv.id
   liquidity_pool.save()
 
   return liquidity_pool
@@ -63,7 +74,7 @@ export function getCreateWBTCPool(): LiquidityPool {
     }
 
     // Create pool
-    liquidity_pool = initLiquidityPool(pool_addr, underlying as Asset)
+    liquidity_pool = initLiquidityPool(pool_addr, WBTC_OPTIONS_ADDR, underlying as Asset)
   }
 
   return liquidity_pool as LiquidityPool
@@ -91,7 +102,7 @@ export function getCreateETHPool(): LiquidityPool {
     }
 
     // Create pool
-    liquidity_pool = initLiquidityPool(pool_addr, underlying as Asset)
+    liquidity_pool = initLiquidityPool(pool_addr, ETH_OPTIONS_ADDR, underlying as Asset)
   }
 
   return liquidity_pool as LiquidityPool
