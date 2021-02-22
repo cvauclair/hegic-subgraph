@@ -11,7 +11,7 @@ type Provide @entity {
   amount: BigInt!
   numWriteTokens: BigInt!
 
-  pool: LiquidityPool! @derivedFrom(field: "provides")
+  pool: LiquidityPool!
 }
 
 type Withdraw @entity {
@@ -24,7 +24,7 @@ type Withdraw @entity {
   amount: BigInt!
   numWriteTokens: BigInt!
 
-  pool: LiquidityPool!  @derivedFrom(field: "withdraws")
+  pool: LiquidityPool!
 }
 
 type Profit @entity {
@@ -34,7 +34,7 @@ type Profit @entity {
   timestamp: BigInt!
 
   amount: BigInt!
-  pool: LiquidityPool! @derivedFrom(field: "profits")
+  pool: LiquidityPool!
   option: HegicOption!
 }
 
@@ -45,7 +45,7 @@ type Loss @entity {
   timestamp: BigInt!
 
   amount: BigInt!
-  pool: LiquidityPool! @derivedFrom(field: "losses")
+  pool: LiquidityPool!
   option: HegicOption!
 }
 
@@ -62,13 +62,14 @@ type Claim @entity {
 # ================================================================
 # Assets and options
 # ================================================================
-type ImpliedVolatily @entity {
+type ImpliedVolatility @entity {
   id: ID!
 
   blockNumber: BigInt!
   timestamp: BigInt!
 
   impliedVolatility: BigInt!
+  pool: LiquidityPool!
 }
 
 type Asset @entity {
@@ -106,6 +107,7 @@ type HegicOption @entity {
   state: OptionState!
 
   settlementFee: BigInt!
+  pool: LiquidityPool!
 }
 
 # ================================================================
@@ -119,25 +121,25 @@ type LiquidityPool @entity {
   numOptions: BigInt!
   numExpiredOptions: BigInt!
   numExercisedOptions: BigInt!
-  options: [HegicOption]!
+  options: [HegicOption!]! @derivedFrom(field: "pool")
 
   numProvides: BigInt!
-  provides: [Provide]!
+  provides: [Provide!]! @derivedFrom(field: "pool")
   latestProvide: Provide
 
   numWithdraws: BigInt!
-  withdraws: [Withdraw]!
+  withdraws: [Withdraw!]! @derivedFrom(field: "pool")
   latestWithdraw: Withdraw
 
   liquidity: BigInt!
 
   numProfits: BigInt!
-  profits: [Profit]!
+  profits: [Profit!]! @derivedFrom(field: "pool")
   latestProfit: Profit
   totalProfits: BigInt!
 
   numLosses: BigInt!
-  losses: [Loss]!
+  losses: [Loss!]! @derivedFrom(field: "pool")
   latestLoss: Loss
   totalLosses: BigInt!
 
@@ -150,6 +152,6 @@ type LiquidityPool @entity {
 
   # Implied volatility timeseries
   numImpliedVolatility: BigInt!
-  impliedVolatility: [ImpliedVolatily]!
-  latestImpliedVolatility: ImpliedVolatily
+  impliedVolatility: [ImpliedVolatility!]! @derivedFrom(field: "pool")
+  latestImpliedVolatility: ImpliedVolatility
 }

@@ -21,17 +21,12 @@ export function handleProvide(event: ProvideEvent): void {
   provide.account = event.params.account.toHexString().toString()
   provide.amount = event.params.amount
   provide.numWriteTokens = event.params.writeAmount
+  provide.pool = liquidity_pool.id
   provide.save()
 
-  let provides = liquidity_pool.provides;
-  provides.push(provide.id);
-  liquidity_pool.provides = provides;
-
+  liquidity_pool.liquidity = liquidity_pool.liquidity + provide.amount
   liquidity_pool.numProvides = liquidity_pool.numProvides + BigIntOne;
   liquidity_pool.latestProvide = provide.id
-
-  liquidity_pool.liquidity = liquidity_pool.liquidity + provide.amount
-
   liquidity_pool.save()
 }
 
@@ -44,17 +39,12 @@ export function handleWithdraw(event: WithdrawEvent): void {
   withdraw.account = event.params.account.toHexString().toString()
   withdraw.amount = event.params.amount
   withdraw.numWriteTokens = event.params.writeAmount
+  withdraw.pool = liquidity_pool.id
   withdraw.save()
 
-  let withdraws = liquidity_pool.withdraws;
-  withdraws.push(withdraw.id);
-  liquidity_pool.withdraws = withdraws;
-
+  liquidity_pool.liquidity = liquidity_pool.liquidity - withdraw.amount
   liquidity_pool.numWithdraws = liquidity_pool.numWithdraws + BigIntOne
   liquidity_pool.latestWithdraw = withdraw.id
-
-  liquidity_pool.liquidity = liquidity_pool.liquidity - withdraw.amount
-
   liquidity_pool.save()
 }
 
@@ -66,17 +56,12 @@ export function handleProfit(event: ProfitEvent): void {
   profit.timestamp = event.block.timestamp
   profit.amount = event.params.amount
   profit.option = "WBTC-" + event.params.id.toString()
+  profit.pool = liquidity_pool.id
   profit.save()
 
-  let profits = liquidity_pool.profits;
-  profits.push(profit.id);
-  liquidity_pool.profits = profits;
-
+  liquidity_pool.totalProfits = liquidity_pool.totalProfits + profit.amount
   liquidity_pool.numProfits = liquidity_pool.numProfits + BigIntOne;
   liquidity_pool.latestProfit = profit.id
-
-  liquidity_pool.totalProfits = liquidity_pool.totalProfits + profit.amount
-
   liquidity_pool.save()
 }
 
@@ -88,16 +73,11 @@ export function handleLoss(event: LossEvent): void {
   loss.timestamp = event.block.timestamp
   loss.amount = event.params.amount
   loss.option = "WBTC-" + event.params.id.toString()
+  loss.pool = liquidity_pool.id
   loss.save()
 
-  let losses = liquidity_pool.losses;
-  losses.push(loss.id);
-  liquidity_pool.losses = losses;
-
+  liquidity_pool.totalLosses = liquidity_pool.totalLosses + loss.amount
   liquidity_pool.numLosses = liquidity_pool.numLosses + BigIntOne;
   liquidity_pool.latestProfit = loss.id
-  
-  liquidity_pool.totalLosses = liquidity_pool.totalLosses + loss.amount
-
   liquidity_pool.save()
 }

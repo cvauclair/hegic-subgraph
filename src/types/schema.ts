@@ -401,7 +401,7 @@ export class Claim extends Entity {
   }
 }
 
-export class ImpliedVolatily extends Entity {
+export class ImpliedVolatility extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -409,17 +409,17 @@ export class ImpliedVolatily extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ImpliedVolatily entity without an ID");
+    assert(id !== null, "Cannot save ImpliedVolatility entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save ImpliedVolatily entity with non-string ID. " +
+      "Cannot save ImpliedVolatility entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("ImpliedVolatily", id.toString(), this);
+    store.set("ImpliedVolatility", id.toString(), this);
   }
 
-  static load(id: string): ImpliedVolatily | null {
-    return store.get("ImpliedVolatily", id) as ImpliedVolatily | null;
+  static load(id: string): ImpliedVolatility | null {
+    return store.get("ImpliedVolatility", id) as ImpliedVolatility | null;
   }
 
   get id(): string {
@@ -456,6 +456,15 @@ export class ImpliedVolatily extends Entity {
 
   set impliedVolatility(value: BigInt) {
     this.set("impliedVolatility", Value.fromBigInt(value));
+  }
+
+  get pool(): string {
+    let value = this.get("pool");
+    return value.toString();
+  }
+
+  set pool(value: string) {
+    this.set("pool", Value.fromString(value));
   }
 }
 
@@ -645,6 +654,15 @@ export class HegicOption extends Entity {
   set settlementFee(value: BigInt) {
     this.set("settlementFee", Value.fromBigInt(value));
   }
+
+  get pool(): string {
+    let value = this.get("pool");
+    return value.toString();
+  }
+
+  set pool(value: string) {
+    this.set("pool", Value.fromString(value));
+  }
 }
 
 export class LiquidityPool extends Entity {
@@ -713,12 +731,12 @@ export class LiquidityPool extends Entity {
     this.set("numExercisedOptions", Value.fromBigInt(value));
   }
 
-  get options(): Array<string | null> {
+  get options(): Array<string> {
     let value = this.get("options");
     return value.toStringArray();
   }
 
-  set options(value: Array<string | null>) {
+  set options(value: Array<string>) {
     this.set("options", Value.fromStringArray(value));
   }
 
@@ -731,12 +749,12 @@ export class LiquidityPool extends Entity {
     this.set("numProvides", Value.fromBigInt(value));
   }
 
-  get provides(): Array<string | null> {
+  get provides(): Array<string> {
     let value = this.get("provides");
     return value.toStringArray();
   }
 
-  set provides(value: Array<string | null>) {
+  set provides(value: Array<string>) {
     this.set("provides", Value.fromStringArray(value));
   }
 
@@ -766,12 +784,12 @@ export class LiquidityPool extends Entity {
     this.set("numWithdraws", Value.fromBigInt(value));
   }
 
-  get withdraws(): Array<string | null> {
+  get withdraws(): Array<string> {
     let value = this.get("withdraws");
     return value.toStringArray();
   }
 
-  set withdraws(value: Array<string | null>) {
+  set withdraws(value: Array<string>) {
     this.set("withdraws", Value.fromStringArray(value));
   }
 
@@ -810,12 +828,12 @@ export class LiquidityPool extends Entity {
     this.set("numProfits", Value.fromBigInt(value));
   }
 
-  get profits(): Array<string | null> {
+  get profits(): Array<string> {
     let value = this.get("profits");
     return value.toStringArray();
   }
 
-  set profits(value: Array<string | null>) {
+  set profits(value: Array<string>) {
     this.set("profits", Value.fromStringArray(value));
   }
 
@@ -854,12 +872,12 @@ export class LiquidityPool extends Entity {
     this.set("numLosses", Value.fromBigInt(value));
   }
 
-  get losses(): Array<string | null> {
+  get losses(): Array<string> {
     let value = this.get("losses");
     return value.toStringArray();
   }
 
-  set losses(value: Array<string | null>) {
+  set losses(value: Array<string>) {
     this.set("losses", Value.fromStringArray(value));
   }
 
@@ -934,12 +952,12 @@ export class LiquidityPool extends Entity {
     this.set("numImpliedVolatility", Value.fromBigInt(value));
   }
 
-  get impliedVolatility(): Array<string | null> {
+  get impliedVolatility(): Array<string> {
     let value = this.get("impliedVolatility");
     return value.toStringArray();
   }
 
-  set impliedVolatility(value: Array<string | null>) {
+  set impliedVolatility(value: Array<string>) {
     this.set("impliedVolatility", Value.fromStringArray(value));
   }
 

@@ -1,5 +1,5 @@
 import { Create, Exercise, Expire, SetImpliedVolRateCall } from '../types/HegicETHOptions/HegicOptions'
-import { Asset, HegicOption, ImpliedVolatily } from '../types/schema'
+import { Asset, HegicOption, ImpliedVolatility } from '../types/schema'
 import { HegicOptions as Contract } from '../types/HegicETHOptions/HegicOptions'
 import { Address, log } from '@graphprotocol/graph-ts';
 import { BigIntOne, BigIntZero, ETH_OPTIONS_ADDR, getCreateETHPool } from "../utils";
@@ -16,6 +16,7 @@ export function handleCreate(event: Create): void {
   option.holder = event.params.account.toHexString().toString();
   option.premium = event.params.totalFee - event.params.settlementFee;
   option.settlementFee = event.params.settlementFee;
+  option.pool = liquidity_pool.id
 
   // Get from state 
   let option_data = ethOptions.options(event.params.id)
@@ -48,11 +49,7 @@ export function handleCreate(event: Create): void {
   
   // Save entities
   liquidity_pool.numOptions = liquidity_pool.numOptions + BigIntOne;
-  
-  let options = liquidity_pool.options;
-  options.push(option.id);
-  liquidity_pool.options = options;
-  
+    
   liquidity_pool.totalSettlementFees = liquidity_pool.totalSettlementFees + option.settlementFee;
   liquidity_pool.totalFees = liquidity_pool.totalFees + event.params.totalFee;
 
@@ -91,15 +88,13 @@ export function handleSetImpliedVolRate(call: SetImpliedVolRateCall): void {
   let liquidity_pool = getCreateETHPool()
   liquidity_pool.numImpliedVolatility = liquidity_pool.numImpliedVolatility + BigIntOne
 
-  let iv = new ImpliedVolatily("ETH-" + liquidity_pool.numImpliedVolatility.toString())
+  let iv = new ImpliedVolatility("ETH-" + liquidity_pool.numImpliedVolatility.toString())
   iv.blockNumber = call.block.number
   iv.timestamp = call.block.timestamp
   iv.impliedVolatility = call.inputs.value
+  iv.pool = liquidity_pool.id
   iv.save()
 
-  let ivs = liquidity_pool.impliedVolatility
-  ivs.push(iv.id)
-  liquidity_pool.impliedVolatility = ivs
   liquidity_pool.latestImpliedVolatility = iv.id
   liquidity_pool.save()
 }
