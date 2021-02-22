@@ -1,5 +1,5 @@
 import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts'
-import { Asset, ImpliedVolatily, LiquidityPool } from './types/schema'
+import { Asset, ImpliedVolatility, LiquidityPool } from './types/schema'
 import { HegicOptions as Contract } from './types/HegicWBTCOptions/HegicOptions'
 
 export const BigIntZero =  BigInt.fromI32(0)
@@ -18,20 +18,15 @@ export function initLiquidityPool(address: string, options_addr: string, underly
   liquidity_pool.numOptions = BigIntZero;
   liquidity_pool.numExercisedOptions = BigIntZero;
   liquidity_pool.numExpiredOptions = BigIntZero;
-  liquidity_pool.options = [];
 
   liquidity_pool.numProvides = BigIntZero;
-  liquidity_pool.provides = [];
   liquidity_pool.numWithdraws = BigIntZero;
-  liquidity_pool.withdraws = [];
   liquidity_pool.liquidity = BigIntZero;
 
   liquidity_pool.numProfits = BigIntZero;
-  liquidity_pool.profits = [];
   liquidity_pool.totalProfits = BigIntZero;
 
   liquidity_pool.numLosses = BigIntZero;
-  liquidity_pool.losses = [];
   liquidity_pool.totalLosses = BigIntZero;
 
   liquidity_pool.totalSettlementFees = BigIntZero;
@@ -40,17 +35,6 @@ export function initLiquidityPool(address: string, options_addr: string, underly
   liquidity_pool.totalCallVolume = BigIntZero;
 
   liquidity_pool.numImpliedVolatility = BigIntZero
-  liquidity_pool.impliedVolatility = []
-  // let contract = Contract.bind(Address.fromString(options_addr));
-  // let iv = new ImpliedVolatily(underlying.symbol + "-" + liquidity_pool.numImpliedVolatility.toString())
-  // iv.blockNumber = BigInt.fromI32(11029620)
-  // iv.timestamp = BigInt.fromI32(1602315209)
-  // iv.impliedVolatility = contract.impliedVolRate()
-  // iv.save()
-
-  // liquidity_pool.numImpliedVolatility = BigIntOne
-  // liquidity_pool.impliedVolatility = [iv.id]
-  // liquidity_pool.latestImpliedVolatility = iv.id
   liquidity_pool.save()
 
   return liquidity_pool
