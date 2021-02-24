@@ -27,6 +27,9 @@ type Withdraw @entity {
   pool: LiquidityPool!
 }
 
+# Note: Profit and Loss events are from the pool's point of vue.
+# E.g.: A Profit event with fields {option: OID, amount: X, pool: PID}
+# means that Pool "PID" has made a profit of "X" from the option "OID".
 type Profit @entity {
   id: ID! # POOL_ADDR-POOL_PROFIT_INDEX
 

@@ -59,9 +59,14 @@ export function handleProfit(event: ProfitEvent): void {
   profit.pool = liquidity_pool.id
   profit.save()
 
+  // Update cumulative gross profits
   liquidity_pool.totalProfits = liquidity_pool.totalProfits + profit.amount
   liquidity_pool.numProfits = liquidity_pool.numProfits + BigIntOne;
   liquidity_pool.latestProfit = profit.id
+
+  // Update liquidity
+  liquidity_pool.liquidity = liquidity_pool.liquidity + profit.amount
+
   liquidity_pool.save()
 }
 
@@ -76,8 +81,13 @@ export function handleLoss(event: LossEvent): void {
   loss.pool = liquidity_pool.id
   loss.save()
 
+  // Update cumulative gross losses
   liquidity_pool.totalLosses = liquidity_pool.totalLosses + loss.amount
   liquidity_pool.numLosses = liquidity_pool.numLosses + BigIntOne;
   liquidity_pool.latestProfit = loss.id
+
+  // Update liquidity
+  liquidity_pool.liquidity = liquidity_pool.liquidity - loss.amount
+
   liquidity_pool.save()
 }
